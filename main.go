@@ -4,7 +4,14 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 )
+
+func doSomething(c chan<- int) {
+	time.Sleep(3 * time.Second)
+	fmt.Println("DONE!!!")
+	c <- 1
+}
 
 func main() {
 	var x int
@@ -27,13 +34,23 @@ func main() {
 
 	fmt.Println(m[key])
 
-	s := []string{"Tacos", "Tortas", "Hamborguesas"}
+	s := []string{"Tacos", "Hot-Dogs", "Hamburgers"}
 
-	s = append(s, "Chesco")
+	s = append(s, "Orange Juice")
 
 	for index, value := range s {
 		fmt.Println(index)
 		fmt.Println(value)
 	}
+
+	c := make(chan int)
+	go doSomething(c)
+	<-c
+	g := 25
+	fmt.Println(g)
+	h := &g // pointer -> reference
+
+	fmt.Println(h)
+	fmt.Println(*h) // access to the value -> *
 
 }
