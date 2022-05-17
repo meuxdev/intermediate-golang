@@ -1,0 +1,4 @@
+github.com/meuxdev/testing/main.go:3:	Sum		100.0%
+github.com/meuxdev/testing/main.go:8:	GetMax		100.0%
+github.com/meuxdev/testing/main.go:18:	main		0.0%
+total:					(statements)	100.0%

@@ -28,3 +28,22 @@ func TestSum(t *testing.T) {
 		}
 	}
 }
+
+func TestMaxFunc(t *testing.T) {
+	tables := []struct {
+		a       int
+		b       int
+		maxNumb int
+	}{
+		{4, 2, 4},
+		{2, 4, 4},
+	}
+
+	for _, item := range tables {
+		max := GetMax(item.a, item.b)
+		if max != item.maxNumb {
+			t.Errorf("Get Mas was incorrect, got %d, expected %d", max, item.maxNumb)
+		}
+	}
+
+}
