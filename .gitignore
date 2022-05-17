@@ -1,0 +1,8 @@
+# Compilation directory
+build/
+
+# vim swap files
+*.swp
+*.swo
+
+
