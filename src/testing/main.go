@@ -15,5 +15,20 @@ func GetMax(x, y int) (max int) {
 	return
 }
 
+type NodeFibo struct {
+	val    int
+	result int
+}
+
+func Fibonacci(n int) (result int) {
+
+	if n <= 1 {
+		result = n
+	} else {
+		result = Fibonacci(n-1) + Fibonacci(n-2)
+	}
+	return
+}
+
 func main() {
 }

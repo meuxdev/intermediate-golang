@@ -45,5 +45,24 @@ func TestMaxFunc(t *testing.T) {
 			t.Errorf("Get Mas was incorrect, got %d, expected %d", max, item.maxNumb)
 		}
 	}
+}
 
+func TestFib(t *testing.T) {
+	tables := []struct {
+		query  int
+		result int
+	}{
+		{1, 1},
+		{8, 21},
+		{11, 89},
+		{25, 75025},
+	}
+
+	for _, item := range tables {
+		fib := Fibonacci(item.query)
+
+		if fib != item.result {
+			t.Errorf("Fibonacci was incorrect, expected %d received %d", item.result, fib)
+		}
+	}
 }
