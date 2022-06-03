@@ -15,25 +15,22 @@ type Job struct {
 }
 
 type Worker struct {
-	Id         int
-	JobQueue   chan Job
-	WorkerPool chan chan Job
-	QuitChan   chan bool
+	Id       int
+	JobQueue chan Job
+	QuitChan chan bool
 }
 
-func NewWorker(id int, workerPool chan chan Job) *Worker {
+func NewWorker(id int, jobQueue chan Job) *Worker {
 	return &Worker{
-		Id:         id,
-		JobQueue:   make(chan Job),
-		WorkerPool: workerPool,
-		QuitChan:   make(chan bool),
+		Id:       id,
+		JobQueue: jobQueue,
+		QuitChan: make(chan bool),
 	}
 }
 
 func (w Worker) Start() {
 	go func() {
 		for {
-			w.WorkerPool <- w.JobQueue
 			select {
 			case job := <-w.JobQueue:
 				fmt.Printf("Worker with id %d started...\n", w.Id)
@@ -54,39 +51,22 @@ func (w Worker) Stop() {
 }
 
 type Dispatcher struct {
-	WorkerPool chan chan Job
 	MaxWorkers int
 	JobQueue   chan Job
 }
 
 func NewDispatcher(jobQueue chan Job, maxWorkers int) *Dispatcher {
-	worker := make(chan chan Job, maxWorkers)
 	return &Dispatcher{
-		WorkerPool: worker,
 		MaxWorkers: maxWorkers,
 		JobQueue:   jobQueue,
 	}
 }
 
-func (d *Dispatcher) Dispatch() {
-	for {
-		select {
-		case job := <-d.JobQueue:
-			go func() {
-				workerJobQueue := <-d.WorkerPool
-				workerJobQueue <- job
-			}()
-		}
-	}
-}
-
 func (d *Dispatcher) Run() {
 	for i := 0; i < d.MaxWorkers; i++ {
-		worker := NewWorker(i, d.WorkerPool)
+		worker := NewWorker(i, d.JobQueue)
 		worker.Start()
 	}
-
-	go d.Dispatch()
 }
 
 func main() {
@@ -97,7 +77,7 @@ func main() {
 	)
 	jobQueue := make(chan Job, maxQueueSize)
 	dispatcher := NewDispatcher(jobQueue, maxWorkers)
-	fmt.Printf("Server Fibonacci Running: -- \n Port: %s\n http://localhost%s/fib", port, port)
+	fmt.Printf("Server Fibonacci Running: -- \n Port: %s\n http://localhost%s/fib\n", port, port)
 	dispatcher.Run()
 	// http://localhost:8081/fib
 	http.HandleFunc("/fib", func(w http.ResponseWriter, r *http.Request) {
